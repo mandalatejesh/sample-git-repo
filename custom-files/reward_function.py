@@ -72,13 +72,18 @@ Good:
     next_point = waypoints[closest_waypoints[1]]
     prev_point = waypoints[closest_waypoints[0]]
 
+    sp = int(math.floor(speed) + 2)
+
+    consider_point = waypoints[(closest_waypoints[1]+sp)%len(waypoints)]
+
     # Calculate the direction in radius, arctan2(dy, dx), the result is (-pi, pi) in radians
     track_direction = direction(prev_point, next_point)
+    intended_direction = direction(prev_point, consider_point)
     tr_next_point = transform_theta(next_point, track_direction)
     tr_next_next_point = transform_theta(next_next_point, track_direction)
     angle = angle_with_x(tr_next_point, tr_next_next_point)
     # Calculate the difference between the track direction and the heading direction of the car
-    direction_diff = abs(track_direction - heading)
+    direction_diff = abs(intended_direction - heading)
     if direction_diff > 180:
         direction_diff = 360 - direction_diff
         
@@ -95,6 +100,8 @@ Good:
             reward += 0.2
     elif (abs(speed - desired_speed) < 0.3):
         reward += 0.5
+    else:
+        reward += 0.2
         
     if not (should_be_left ^ params['is_left_of_center']):
         reward += 0.3
