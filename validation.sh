@@ -1,4 +1,7 @@
 #!/bin/bash
+
+BUCKET=$1
+
 python3 -m py_compile custom-files/reward_function.py
 if [ $? -eq 1 ]; then echo "error in reward_function.py" && exit 1; fi
 jq -e < custom-files/model_metadata.json

@@ -40,7 +40,7 @@ fi
 
 chmod +x ./validation.sh
 
-./validation.sh
+./validation.sh ${BUCKET}
 
 if [[ $? -ne 0 ]]; then
     while true; do
